@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PlayerSeat from './PlayerSeat';
 import Controls from './Controls';
 import Card from './Card';
@@ -19,6 +19,7 @@ function GameBoard({
   const me = room.players[socketId];
   const isHost = socketId === room.hostId;
   const isSpectator = me ? me.seatIndex === -1 : true;
+  const [showSuitRankings, setShowSuitRankings] = useState(false);
 
   const winnerIds = showdownResults.map(r => r.id);
 
@@ -148,6 +149,14 @@ function GameBoard({
           >
             ℹ️ ลำดับไพ่
           </button>
+          <button 
+            type="button" 
+            className="lobby-action-btn" 
+            onClick={() => setShowSuitRankings(true)}
+            style={{ padding: '5px 12px', fontSize: '0.8rem', borderColor: 'var(--gold-dark)', color: 'var(--gold)' }}
+          >
+            🎨 ลำดับดอก
+          </button>
           <button className="leave-room-btn" onClick={onLeaveRoom}>
             ออกจากห้อง
           </button>
@@ -239,6 +248,14 @@ function GameBoard({
               >
                 ℹ️ ลำดับไพ่
               </button>
+              <button 
+                type="button" 
+                className="lobby-action-btn" 
+                onClick={() => setShowSuitRankings(true)}
+                style={{ borderColor: 'var(--gold-dark)', color: 'var(--gold)' }}
+              >
+                🎨 ลำดับดอก
+              </button>
               <button className="lobby-action-btn stand-btn" onClick={onStandUp}>
                 ลุกขึ้นยืน (Stand)
               </button>
@@ -252,6 +269,46 @@ function GameBoard({
           room={room}
           onAction={onAction}
         />
+
+        {showSuitRankings && (
+          <div className="modal-overlay" onClick={() => setShowSuitRankings(false)}>
+            <div className="modal-content suit-rankings-modal animate-scaleIn" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>🏆 ลำดับดอกไพ่ (Suit Rankings)</h3>
+                <button className="close-btn" onClick={() => setShowSuitRankings(false)}>&times;</button>
+              </div>
+              <div className="modal-body">
+                <div className="suit-ranking-list">
+                  <div className="suit-ranking-item highest">
+                    <span className="rank-num">1</span>
+                    <span className="suit-symbol spades">♠</span>
+                    <span className="suit-name-th">โพดำ (Spades)</span>
+                    <span className="suit-status-badge highest-badge">สูงสุด</span>
+                  </div>
+                  <div className="suit-ranking-item">
+                    <span className="rank-num">2</span>
+                    <span className="suit-symbol hearts">♥</span>
+                    <span className="suit-name-th">โพแดง (Hearts)</span>
+                  </div>
+                  <div className="suit-ranking-item">
+                    <span className="rank-num">3</span>
+                    <span className="suit-symbol diamonds">♦</span>
+                    <span className="suit-name-th">ข้าวหลามตัด (Diamonds)</span>
+                  </div>
+                  <div className="suit-ranking-item lowest">
+                    <span className="rank-num">4</span>
+                    <span className="suit-symbol clubs">♣</span>
+                    <span className="suit-name-th">ดอกจิก (Clubs)</span>
+                    <span className="suit-status-badge lowest-badge">ต่ำสุด</span>
+                  </div>
+                </div>
+                <p className="suit-ranking-note">
+                  ℹ️ ตามกติกาโป๊กเกอร์สากล ดอกไพ่ทั้งหมดมีค่าเท่ากันในการวัดแต้มไพ่ (ไม่มีการนับดอกเพื่อหาผู้ชนะหลัก) ลำดับนี้ใช้เพื่อการตัดสินผลในกรณีพิเศษ หรือกติกาเสริมเฉพาะกลุ่มเท่านั้น
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
