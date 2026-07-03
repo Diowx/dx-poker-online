@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card';
+import { AvatarIcon } from './AvatarIcon';
 
 function PlayerSeat({ 
   player, 
@@ -106,8 +107,8 @@ function PlayerSeat({
 
       {/* Seated user card */}
       <div className="player-avatar-wrapper">
-        <div className="player-avatar" style={{ backgroundColor: avatarBg }}>
-          {player.name.charAt(0).toUpperCase()}
+        <div className="player-avatar" style={{ background: 'transparent' }}>
+          <AvatarIcon id={player.avatar} size="100%" />
           {isSelf && <span className="self-tag">ME</span>}
         </div>
         

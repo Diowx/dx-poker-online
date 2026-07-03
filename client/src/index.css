@@ -655,6 +655,7 @@ body {
   box-shadow: 0 3px 6px rgba(0,0,0,0.4);
   position: relative;
   z-index: 2;
+  overflow: hidden;
 }
 
 .self-tag {
@@ -1438,5 +1439,50 @@ body {
   to {
     transform: scale(1.04);
     text-shadow: 0 0 35px rgba(212, 175, 55, 0.7);
+  }
+}
+
+/* AVATAR SELECTOR GRID (Lobby) */
+.avatar-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.avatar-selector-btn {
+  background: none;
+  border: 2px solid transparent;
+  padding: 3px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-selector-btn:hover {
+  transform: scale(1.12);
+  filter: brightness(1.15);
+}
+
+.avatar-selector-btn.selected {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+  transform: scale(1.18);
+}
+
+@media (max-width: 480px) {
+  .avatar-selector-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 8px;
   }
 }

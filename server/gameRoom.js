@@ -44,10 +44,11 @@ class GameRoom {
     });
   }
 
-  addPlayer(socketId, name) {
+  addPlayer(socketId, name, avatar = 'm1') {
     this.players[socketId] = {
       id: socketId,
       name: name,
+      avatar: avatar,
       chips: 0,
       seatIndex: -1,
       cards: [],

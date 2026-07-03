@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { socket } from '../socket';
 import { playChipBet } from '../utils/audio';
+import { AvatarIcon, AVATAR_LIST } from './AvatarIcon';
 
 function Lobby({ onRoomJoined, onOpenRankings }) {
   const [playerName, setPlayerName] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState('m1');
   const [roomCode, setRoomCode] = useState('');
   const [smallBlind, setSmallBlind] = useState(10);
   const [defaultBuyIn, setDefaultBuyIn] = useState(1000);
@@ -27,7 +29,8 @@ function Lobby({ onRoomJoined, onOpenRankings }) {
       smallBlind: parseInt(smallBlind),
       defaultBuyIn: parseInt(defaultBuyIn),
       useTimer,
-      turnDuration: parseInt(turnDuration)
+      turnDuration: parseInt(turnDuration),
+      avatar: selectedAvatar
     }, (response) => {
       if (response.success) {
         onRoomJoined(response.roomId, playerName.trim());
@@ -53,7 +56,8 @@ function Lobby({ onRoomJoined, onOpenRankings }) {
     socket.connect();
     socket.emit('join-room', {
       roomId: roomCode.trim().toUpperCase(),
-      name: playerName.trim()
+      name: playerName.trim(),
+      avatar: selectedAvatar
     }, (response) => {
       if (response.success) {
         onRoomJoined(response.roomId, playerName.trim());
@@ -100,6 +104,26 @@ function Lobby({ onRoomJoined, onOpenRankings }) {
               maxLength={12}
               required
             />
+          </div>
+
+          <div className="input-group">
+            <label>เลือกตัวละครโพรไฟล์ของคุณ (Avatar Selection)</label>
+            <div className="avatar-selector-grid">
+              {AVATAR_LIST.map((avatar) => (
+                <button
+                  key={avatar.id}
+                  type="button"
+                  className={`avatar-selector-btn ${selectedAvatar === avatar.id ? 'selected' : ''}`}
+                  onClick={() => {
+                    playChipBet();
+                    setSelectedAvatar(avatar.id);
+                  }}
+                  title={avatar.name}
+                >
+                  <AvatarIcon id={avatar.id} size={42} />
+                </button>
+              ))}
+            </div>
           </div>
 
           {activeTab === 'join' ? (

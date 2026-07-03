@@ -48,6 +48,7 @@ function getCleanedGameState(room, clientSocketId) {
     playersCleaned[sid] = {
       id: p.id,
       name: p.name,
+      avatar: p.avatar,
       chips: p.chips,
       seatIndex: p.seatIndex,
       isReady: p.isReady,
@@ -131,7 +132,7 @@ io.on('connection', (socket) => {
     currentRoomId = roomId;
     
     // Add host as player
-    room.addPlayer(socket.id, config.playerName || 'Host');
+    room.addPlayer(socket.id, config.playerName || 'Host', config.avatar);
     
     // Auto sit the host at seat 0
     room.sitPlayer(socket.id, 0, config.buyIn || room.defaultBuyIn);
@@ -141,7 +142,7 @@ io.on('connection', (socket) => {
   });
 
   // 2. Join Room
-  socket.on('join-room', ({ roomId, name }, callback) => {
+  socket.on('join-room', ({ roomId, name, avatar }, callback) => {
     const cleanedRoomId = roomId.toUpperCase();
     const room = rooms[cleanedRoomId];
     if (!room) {
@@ -158,7 +159,7 @@ io.on('connection', (socket) => {
     currentRoomId = cleanedRoomId;
     
     // Add player to the room
-    room.addPlayer(socket.id, name);
+    room.addPlayer(socket.id, name, avatar);
 
     // Auto-sit at first available seat
     let assignedSeat = -1;
