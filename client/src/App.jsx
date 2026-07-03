@@ -3,6 +3,7 @@ import { socket } from './socket';
 import Lobby from './components/Lobby';
 import GameBoard from './components/GameBoard';
 import GameChat from './components/GameChat';
+import HandRankingsModal from './components/HandRankingsModal';
 import { playCardDeal, playChipBet, playTimerAlert, playWinnerReveal } from './utils/audio';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [roomId, setRoomId] = useState('');
   const [socketId, setSocketId] = useState('');
   const [roomState, setRoomState] = useState(null);
+  const [isRankingsOpen, setIsRankingsOpen] = useState(false);
   
   // Showdown state persistence
   const [showdownOpponentCards, setShowdownOpponentCards] = useState(null);
@@ -153,7 +155,7 @@ function App() {
   return (
     <div className="app-layout">
       {view === 'lobby' ? (
-        <Lobby onRoomJoined={handleRoomJoined} />
+        <Lobby onRoomJoined={handleRoomJoined} onOpenRankings={() => setIsRankingsOpen(true)} />
       ) : (
         roomState && (
           <div className="game-screen-wrapper">
@@ -167,11 +169,17 @@ function App() {
               onSetReady={handleSetReady}
               onRebuy={handleSitOrRebuy}
               onLeaveRoom={handleLeaveRoom}
+              onOpenRankings={() => setIsRankingsOpen(true)}
             />
             <GameChat logs={roomState.gameLogs} />
           </div>
         )
       )}
+
+      <HandRankingsModal 
+        isOpen={isRankingsOpen} 
+        onClose={() => setIsRankingsOpen(false)} 
+      />
     </div>
   );
 }

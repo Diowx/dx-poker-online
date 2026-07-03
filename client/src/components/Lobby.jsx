@@ -185,6 +185,27 @@ function Lobby({ onRoomJoined }) {
               </button>
             </form>
           )}
+
+          <button 
+            type="button" 
+            className="lobby-info-link" 
+            onClick={onOpenRankings}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--gold)',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              marginTop: '20px',
+              width: '100%',
+              textAlign: 'center',
+              textDecoration: 'underline',
+              fontFamily: 'var(--font-brand)',
+              fontWeight: '600'
+            }}
+          >
+            ℹ️ ดูคู่มือลำดับหน้าไพ่ (Hand Rankings Guide)
+          </button>
         </div>
       </div>
     </div>

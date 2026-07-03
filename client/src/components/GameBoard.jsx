@@ -13,7 +13,8 @@ function GameBoard({
   onStandUp,
   onSetReady,
   onRebuy,
-  onLeaveRoom
+  onLeaveRoom,
+  onOpenRankings
 }) {
   const me = room.players[socketId];
   const isHost = socketId === room.hostId;
@@ -138,9 +139,19 @@ function GameBoard({
           {getGameStateHeader()}
         </div>
 
-        <button className="leave-room-btn" onClick={onLeaveRoom}>
-          ออกจากห้อง
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button 
+            type="button" 
+            className="lobby-action-btn" 
+            onClick={onOpenRankings}
+            style={{ padding: '5px 12px', fontSize: '0.8rem', borderColor: 'var(--gold-dark)', color: 'var(--gold)' }}
+          >
+            ℹ️ ลำดับไพ่
+          </button>
+          <button className="leave-room-btn" onClick={onLeaveRoom}>
+            ออกจากห้อง
+          </button>
+        </div>
       </div>
 
       {/* Main Oval Table */}
