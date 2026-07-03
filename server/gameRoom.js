@@ -122,7 +122,9 @@ class GameRoom {
 
     // If game is running, fold them first
     if (this.gameState !== 'LOBBY' && !player.isFolded) {
-      this.foldPlayer(socketId);
+      player.isFolded = true;
+      player.talked = true;
+      this.log(`${player.name} folds.`);
     }
 
     const seat = player.seatIndex;
