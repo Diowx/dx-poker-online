@@ -40,11 +40,13 @@ function App() {
             }
           }
 
-          // เล่นเสียงแจ้งเตือนระฆังใน 1 วินาทีสุดท้ายก่อนเริ่มตาใหม่
+          // เล่นเสียงแจ้งเตือนระฆังใน 10 วินาทีสุดท้ายก่อนเริ่มตาใหม่ (นับ 10 ถึง 2 จะดังติ๊กเบาๆ และเลข 1 จะดังปิ๊งหน่องเริ่มเกม)
           if (prevRoomState && 
-              newRoomState.lobbyCountdown === 1 && 
-              prevRoomState.lobbyCountdown !== 1) {
-            playLobbyCountdownAlert();
+              newRoomState.lobbyCountdown <= 10 && 
+              newRoomState.lobbyCountdown > 0 && 
+              newRoomState.lobbyCountdown !== prevRoomState.lobbyCountdown) {
+            const isFinal = newRoomState.lobbyCountdown === 1;
+            playLobbyCountdownAlert(isFinal);
           }
 
           // Play chip sound when pot increases
