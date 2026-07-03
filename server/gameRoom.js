@@ -444,6 +444,10 @@ class GameRoom {
     } else {
       this.handleAction(socketId, 'fold');
     }
+
+    if (this.onTurnChange) {
+      this.onTurnChange();
+    }
   }
 
   handleAction(socketId, actionType, amount = 0) {

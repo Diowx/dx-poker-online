@@ -128,6 +128,10 @@ io.on('connection', (socket) => {
       broadcastRoomState(room);
     };
 
+    room.onTurnChange = () => {
+      broadcastRoomState(room);
+    };
+
     // Join socket room
     socket.join(roomId);
     currentRoomId = roomId;
