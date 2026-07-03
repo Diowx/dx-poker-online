@@ -143,3 +143,36 @@ export const playWinnerReveal = () => {
     console.warn("Audio play blocked or failed: ", e);
   }
 };
+
+export const playLobbyCountdownAlert = () => {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    // เสียงต๊อกแต๊กและระฆังเตือนเริ่มเกม (Rising Ding-Dong)
+    const tones = [
+      { freq: 587.33, duration: 0.15, delay: 0 },       // D5 note
+      { freq: 880.00, duration: 0.35, delay: 0.12 }      // A5 note
+    ];
+
+    tones.forEach((tone) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(tone.freq, now + tone.delay);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.08, now + tone.delay + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + tone.delay + tone.duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now + tone.delay);
+      osc.stop(now + tone.delay + tone.duration);
+    });
+  } catch (e) {
+    console.warn("Audio play blocked or failed: ", e);
+  }
+};

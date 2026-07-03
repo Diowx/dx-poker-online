@@ -4,7 +4,7 @@ import Lobby from './components/Lobby';
 import GameBoard from './components/GameBoard';
 import GameChat from './components/GameChat';
 import HandRankingsModal from './components/HandRankingsModal';
-import { playCardDeal, playChipBet, playTimerAlert, playWinnerReveal } from './utils/audio';
+import { playCardDeal, playChipBet, playTimerAlert, playWinnerReveal, playLobbyCountdownAlert } from './utils/audio';
 
 function App() {
   const [view, setView] = useState('lobby'); // 'lobby' or 'game'
@@ -38,6 +38,13 @@ function App() {
               setShowdownOpponentCards(null);
               setShowdownResults([]);
             }
+          }
+
+          // เล่นเสียงแจ้งเตือนระฆังใน 1 วินาทีสุดท้ายก่อนเริ่มตาใหม่
+          if (prevRoomState && 
+              newRoomState.lobbyCountdown === 1 && 
+              prevRoomState.lobbyCountdown !== 1) {
+            playLobbyCountdownAlert();
           }
 
           // Play chip sound when pot increases
