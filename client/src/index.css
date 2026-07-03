@@ -797,14 +797,29 @@ body {
   font-weight: 800;
 }
 
-/* มงกุฎผู้ชนะลอยได้ */
-.winner-crown {
+/* มงกุฎผู้ชนะเกาะที่มุมไพ่ */
+.winner-crown-cards {
   position: absolute;
-  top: -24px;
-  font-size: 1.6rem;
-  z-index: 10;
+  top: -22px;
+  right: -14px;
+  font-size: 1.5rem;
+  z-index: 12;
   animation: crownBounce 0.8s infinite alternate ease-in-out;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8));
+  pointer-events: none;
+}
+
+/* ตกแต่งข้อมูลตัวเราเองให้โดดเด่นสะดุดตา */
+.self-details .player-name {
+  color: #ffd700 !important; /* ชื่อสีทองสว่าง */
+  font-weight: 900 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.self-details .player-chips {
+  color: #ffffff !important; /* ยอดชิปสีขาวสว่างเด่น */
+  font-weight: 800 !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
 }
 
 @keyframes crownBounce {

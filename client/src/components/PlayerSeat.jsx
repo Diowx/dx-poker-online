@@ -72,6 +72,7 @@ function PlayerSeat({
 
     return (
       <div className="pocket-cards">
+        {isWinner && <div className="winner-crown-cards">👑</div>}
         {cardsToUse.map((c, idx) => (
           <Card 
             key={idx}
@@ -107,7 +108,6 @@ function PlayerSeat({
 
       {/* Seated user card */}
       <div className="player-avatar-wrapper">
-        {isWinner && <div className="winner-crown">👑</div>}
         <div className="player-avatar" style={{ background: 'transparent' }}>
           <AvatarIcon id={player.avatar} size="100%" />
         </div>
@@ -118,7 +118,7 @@ function PlayerSeat({
         {badge && <div className={`action-badge ${badge.className}`}>{badge.text}</div>}
       </div>
 
-      <div className="player-details">
+      <div className={`player-details ${isSelf ? 'self-details' : ''}`}>
         <span className="player-name">{player.name}</span>
         <span className="player-chips">${player.chips.toLocaleString()}</span>
       </div>
