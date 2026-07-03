@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { socket } from '../socket';
 import { playChipBet } from '../utils/audio';
 
-function Lobby({ onRoomJoined }) {
+function Lobby({ onRoomJoined, onOpenRankings }) {
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [smallBlind, setSmallBlind] = useState(10);
