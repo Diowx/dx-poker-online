@@ -222,9 +222,19 @@ function GameBoard({
               )
             )}
             
-            <button className="lobby-action-btn stand-btn" onClick={onStandUp}>
-              ลุกขึ้นยืน (Stand)
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button 
+                type="button" 
+                className="lobby-action-btn" 
+                onClick={onOpenRankings}
+                style={{ borderColor: 'var(--gold-dark)', color: 'var(--gold)' }}
+              >
+                ℹ️ ลำดับไพ่
+              </button>
+              <button className="lobby-action-btn stand-btn" onClick={onStandUp}>
+                ลุกขึ้นยืน (Stand)
+              </button>
+            </div>
           </div>
         )}
 
