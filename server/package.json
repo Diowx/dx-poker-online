@@ -1,0 +1,16 @@
+{
+  "name": "poker-online-server",
+  "version": "1.0.0",
+  "description": "Poker Online Backend Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node testEvaluator.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "poker-online": "file:..",
+    "socket.io": "^4.7.5"
+  }
+}
