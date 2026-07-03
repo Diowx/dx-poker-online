@@ -81,6 +81,7 @@ function getCleanedGameState(room, clientSocketId) {
     currentPlayerIndex: room.currentPlayerIndex,
     timerTimeLeft: room.timerTimeLeft,
     lobbyCountdown: room.lobbyCountdown,
+    cardBack: room.cardBack,
     gameLogs: room.gameLogs.slice(-30) // Only send the last 30 logs to reduce bandwidth
   };
 }

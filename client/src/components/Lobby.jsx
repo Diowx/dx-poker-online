@@ -30,7 +30,8 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
       defaultBuyIn: parseInt(defaultBuyIn),
       useTimer,
       turnDuration: parseInt(turnDuration),
-      avatar: selectedAvatar
+      avatar: selectedAvatar,
+      cardBack: cardBack
     }, (response) => {
       if (response.success) {
         onRoomJoined(response.roomId, playerName.trim());
@@ -126,36 +127,38 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
             </div>
           </div>
 
-          <div className="input-group">
-            <label>เลือกลายหลังไพ่ของคุณ (Card Back Selection)</label>
-            <div className="cardback-selector-grid">
-              {[
-                { id: 'red', name: 'แดงคลาสสิก' },
-                { id: 'blue', name: 'น้ำเงินรอยัล' },
-                { id: 'black', name: 'ดำคาร์บอน' },
-                { id: 'gold', name: 'ทองคำหรู' }
-              ].map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  className={`cardback-selector-btn ${cardBack === opt.id ? 'selected' : ''}`}
-                  onClick={() => {
-                    playChipBet();
-                    onSelectCardBack(opt.id);
-                  }}
-                  title={opt.name}
-                >
-                  <div className="cardback-preview">
-                    <div className={`poker-card back mini-card ${opt.id}`}>
-                      <div className="card-back-pattern">
-                        <div className="pattern-inner"></div>
+          {activeTab === 'create' && (
+            <div className="input-group">
+              <label>เลือกลายหลังไพ่ประจำโต๊ะ (Card Back Selection)</label>
+              <div className="cardback-selector-grid">
+                {[
+                  { id: 'red', name: 'แดงคลาสสิก' },
+                  { id: 'blue', name: 'น้ำเงินรอยัล' },
+                  { id: 'black', name: 'ดำคาร์บอน' },
+                  { id: 'gold', name: 'ทองคำหรู' }
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    className={`cardback-selector-btn ${cardBack === opt.id ? 'selected' : ''}`}
+                    onClick={() => {
+                      playChipBet();
+                      onSelectCardBack(opt.id);
+                    }}
+                    title={opt.name}
+                  >
+                    <div className="cardback-preview">
+                      <div className={`poker-card back mini-card ${opt.id}`}>
+                        <div className="card-back-pattern">
+                          <div className="pattern-inner"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {activeTab === 'join' ? (
             <form onSubmit={handleJoinRoom} className="lobby-form">

@@ -11,6 +11,7 @@ class GameRoom {
     this.defaultBuyIn = config.defaultBuyIn || 1000;
     this.turnDuration = config.turnDuration !== undefined ? config.turnDuration : 30; // seconds
     this.useTimer = config.useTimer !== undefined ? config.useTimer : true;
+    this.cardBack = config.cardBack || 'red';
     this.maxPlayers = 6;
 
     // Room state

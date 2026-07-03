@@ -163,8 +163,10 @@ function App() {
     }
   };
 
+  const activeCardBack = view === 'game' && roomState ? (roomState.cardBack || 'red') : cardBack;
+
   return (
-    <div className={`app-layout deck-${cardBack}`}>
+    <div className={`app-layout deck-${activeCardBack}`}>
       {view === 'lobby' ? (
         <Lobby 
           onRoomJoined={handleRoomJoined} 
