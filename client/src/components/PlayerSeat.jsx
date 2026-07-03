@@ -88,7 +88,7 @@ function PlayerSeat({
   };
 
   return (
-    <div className={`player-seat occupied ${isActive ? 'active' : ''} ${player.isOnline ? '' : 'offline'} ${isWinner ? 'winner-glow' : ''}`}>
+    <div className={`player-seat occupied ${isActive ? 'active' : ''} ${player.isOnline ? '' : 'offline'} ${isWinner ? 'winner-glow' : ''} ${isSelf ? 'self-seat' : ''}`}>
       {/* Turn timer circle */}
       {isActive && (
         <svg className="timer-svg" width="100" height="100">

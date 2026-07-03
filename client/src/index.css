@@ -822,6 +822,24 @@ body {
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
 }
 
+/* เก้าอี้ของตัวเราเองเรืองแสงลมหายใจสีทองเบาๆ ตลอดเวลา */
+.player-seat.occupied.self-seat {
+  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+  animation: selfSeatBreath 2s infinite alternate ease-in-out;
+}
+
+@keyframes selfSeatBreath {
+  0% {
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.1), inset 0 0 4px rgba(255, 215, 0, 0.05);
+    border-color: rgba(255, 215, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.35), inset 0 0 8px rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.65);
+  }
+}
+
 @keyframes crownBounce {
   from {
     transform: translateY(0) scale(1);
