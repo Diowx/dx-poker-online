@@ -45,17 +45,16 @@ function Controls({ player, room, onAction }) {
   };
 
   // Preset buttons
-  const handlePreset = (multiplier) => {
+  const handlePreset = (fraction) => {
     playChipBet();
     let target = 0;
-    if (multiplier === 'pot') {
-      // Pot size raise = current pot + all active bets + call amount
-      // Let's approximate pot-size raise simply:
-      target = room.pot + checkCost;
-    } else if (multiplier === 'all-in') {
+    if (fraction === 'all-in') {
       target = maxRaise;
     } else {
-      target = room.currentBet * multiplier;
+      // คำนวณขนาดเดิมพันตามสัดส่วนของกองกลาง (Pot Size Raise)
+      // สูตรมาตรฐาน: fraction * (ชิปในกองกลาง + ชิปที่ต้องจ่ายเพื่อสู้) + แต้มเกทับสูงสุดปัจจุบัน
+      const potSize = room.pot + checkCost;
+      target = Math.round(fraction * potSize) + room.currentBet;
     }
     
     setRaiseVal(Math.min(maxRaise, Math.max(minRaise, target)));
@@ -87,10 +86,11 @@ function Controls({ player, room, onAction }) {
       {canRaise && (
         <div className="raise-slider-box">
           <div className="presets-row">
-            {!isBetting && <button onClick={() => handlePreset(2)}>2x</button>}
-            {!isBetting && <button onClick={() => handlePreset(3)}>3x</button>}
-            <button onClick={() => handlePreset('pot')}>Pot</button>
-            <button onClick={() => handlePreset('all-in')} className="all-in-preset">All-in</button>
+            <button type="button" onClick={() => handlePreset(0.25)}>25%</button>
+            <button type="button" onClick={() => handlePreset(0.50)}>50%</button>
+            <button type="button" onClick={() => handlePreset(0.75)}>75%</button>
+            <button type="button" onClick={() => handlePreset(1.00)}>100% (Pot)</button>
+            <button type="button" onClick={() => handlePreset('all-in')} className="all-in-preset">All-in</button>
           </div>
 
           <div className="slider-row">
