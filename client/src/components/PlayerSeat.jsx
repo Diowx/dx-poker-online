@@ -107,6 +107,7 @@ function PlayerSeat({
 
       {/* Seated user card */}
       <div className="player-avatar-wrapper">
+        {isWinner && <div className="winner-crown">👑</div>}
         <div className="player-avatar" style={{ background: 'transparent' }}>
           <AvatarIcon id={player.avatar} size="100%" />
         </div>

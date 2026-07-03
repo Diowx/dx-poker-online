@@ -778,9 +778,54 @@ body {
   font-weight: 700;
 }
 
+.player-seat.occupied.winner-glow {
+  background: rgba(212, 175, 55, 0.15); /* เพิ่มกรอบทองเรืองแสงรอบเก้าอี้คนชนะ */
+  border-color: var(--gold);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
+  transition: all 0.5s ease;
+}
+
 .player-seat.winner-glow .player-avatar {
   border-color: var(--gold);
-  box-shadow: 0 0 15px var(--gold);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), inset 0 0 10px rgba(212, 175, 55, 0.5);
+  animation: winnerAvatarPulse 1.2s infinite alternate ease-in-out;
+}
+
+.player-seat.winner-glow .player-name {
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+  font-weight: 800;
+}
+
+/* มงกุฎผู้ชนะลอยได้ */
+.winner-crown {
+  position: absolute;
+  top: -24px;
+  font-size: 1.6rem;
+  z-index: 10;
+  animation: crownBounce 0.8s infinite alternate ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+}
+
+@keyframes crownBounce {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-6px) scale(1.1);
+  }
+}
+
+@keyframes winnerAvatarPulse {
+  0% {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5), inset 0 0 5px rgba(212, 175, 55, 0.2);
+    border-color: #ffd700;
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(212, 175, 55, 1), inset 0 0 15px rgba(212, 175, 55, 0.7);
+    border-color: #fff;
+    transform: scale(1.05); /* ขยายขนาดรูปโปรไฟล์คนชนะเล็กน้อย */
+  }
 }
 
 .offline-overlay {
