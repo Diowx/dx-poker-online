@@ -242,9 +242,6 @@ class GameRoom {
     }
 
     // Reset player variables for the hand
-    for (const p of this.players) {
-      // Wait, this.players is an object, not array! Let's iterate object keys.
-    }
     Object.values(this.players).forEach(p => {
       p.cards = [];
       p.isFolded = p.seatIndex === -1 || p.chips === 0;
