@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayerSeat from './PlayerSeat';
 import Controls from './Controls';
 import Card from './Card';
-import { playChipBet } from '../utils/audio';
+import { playChipBet, playWinnerReveal } from '../utils/audio';
+import { socket } from '../socket';
 
 function GameBoard({
   room,
@@ -23,6 +24,52 @@ function GameBoard({
   const [showSuitRankings, setShowSuitRankings] = useState(false);
 
   const winnerIds = showdownResults.map(r => r.id);
+
+  const [showSponsorModal, setShowSponsorModal] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(15);
+  const [isClaiming, setIsClaiming] = useState(false);
+
+  // ควบคุมการนับถอยหลังของเวลารับชิปสปอนเซอร์
+  useEffect(() => {
+    let timer = null;
+    if (showSponsorModal && secondsLeft > 0) {
+      timer = setInterval(() => {
+        setSecondsLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [showSponsorModal, secondsLeft]);
+
+  const handleOpenSponsorModal = () => {
+    setSecondsLeft(15);
+    setShowSponsorModal(true);
+  };
+
+  const handleCloseSponsorModal = () => {
+    setShowSponsorModal(false);
+  };
+
+  const handleClaimChips = () => {
+    if (secondsLeft > 0 || isClaiming) return;
+    setIsClaiming(true);
+    socket.emit('claim-free-chips', (res) => {
+      setIsClaiming(false);
+      if (res.success) {
+        playWinnerReveal();
+        setShowSponsorModal(false);
+      } else {
+        alert(res.message || 'เกิดข้อผิดพลาดในการรับชิปฟรี');
+      }
+    });
+  };
 
   // Copy room code to clipboard
   const handleCopyCode = () => {
@@ -264,6 +311,20 @@ function GameBoard({
           </div>
         )}
 
+        {/* แสดงแบนเนอร์แจ้งเงินหมดสำหรับผู้ชมเพื่อขอกดเติมชิปฟรีจากสปอนเซอร์ */}
+        {isSpectator && me && me.chips === 0 && (
+          <div className="lobby-actions-row spectator-broke-row animate-fadeIn">
+            <span className="broke-text-warning">⚠️ ยอดเงินในกระเป๋าของคุณหมดเกลี้ยง ($0)</span>
+            <button 
+              className="lobby-action-btn claim-free-btn" 
+              onClick={handleOpenSponsorModal}
+              style={{ background: 'linear-gradient(135deg, #ffd700 0%, #d4af37 100%)', color: '#000', fontWeight: 'bold', border: 'none', boxShadow: '0 0 10px rgba(255, 215, 0, 0.4)' }}
+            >
+              🎁 รับชิปฟรี $1,000
+            </button>
+          </div>
+        )}
+
         {/* Action Controls for turns */}
         <Controls 
           player={me}
@@ -306,6 +367,61 @@ function GameBoard({
                 <p className="suit-ranking-note">
                   ℹ️ ตามกติกาโป๊กเกอร์สากล ดอกไพ่ทั้งหมดมีค่าเท่ากันในการวัดแต้มไพ่ (ไม่มีการนับดอกเพื่อหาผู้ชนะหลัก) ลำดับนี้ใช้เพื่อการตัดสินผลในกรณีพิเศษ หรือกติกาเสริมเฉพาะกลุ่มเท่านั้น
                 </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL นับถอยหลังโฆษณาสปอนเซอร์แลกชิปฟรี */}
+        {showSponsorModal && (
+          <div className="modal-overlay" onClick={handleCloseSponsorModal}>
+            <div className="modal-content sponsor-modal animate-scaleIn" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>🎁 สนับสนุนสปอนเซอร์เพื่อรับชิปฟรี</h3>
+                <button className="close-btn" onClick={handleCloseSponsorModal}>&times;</button>
+              </div>
+              <div className="modal-body text-center">
+                <p className="sponsor-instruction">
+                  กรุณารอสปอนเซอร์ <strong className="timer-seconds">{secondsLeft} วินาที</strong> เพื่อสิทธิ์เคลมชิปตั้งตัวฟรี
+                </p>
+                
+                {/* แถบ Progress Bar */}
+                <div className="progress-bar-container">
+                  <div className="progress-bar-fill" style={{ width: `${((15 - secondsLeft) / 15) * 100}%` }}></div>
+                </div>
+
+                {/* ส่วนจำลองพื้นที่ติดป้ายโฆษณา AdSense */}
+                <div className="sponsor-ad-container">
+                  <div className="sponsor-ad-label">SPONSOR ADVERTISEMENT</div>
+                  <div className="simulated-ad-banner">
+                    <div className="ad-content-placeholder">
+                      <div className="ad-title">🎰 DX Casino Online 🎰</div>
+                      <div className="ad-desc">แจกฟรีสปินไม่อั้นวันนี้! คาสิโนออนไลน์ที่ใหญ่ที่สุด</div>
+                      <div className="ad-button">เรียนรู้เพิ่มเติม</div>
+                    </div>
+                    {/* 
+                      -- โค้ดสำหรับวาง AdSense จริงในอนาคต (เปิดใช้งานโดยการใส่ ID และลบคอมเมนต์ออก):
+                      <ins className="adsbygoogle"
+                           style={{display:"block"}}
+                           data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+                           data-ad-slot="1234567890"
+                           data-ad-format="auto"
+                           data-full-width-responsive="true"></ins>
+                      <script>
+                           (adsbygoogle = window.adsbygoogle || []).push({});
+                      </script>
+                    */}
+                  </div>
+                </div>
+
+                {/* ปุ่มกดยืนยันการเคลมเงิน */}
+                <button 
+                  className={`claim-chips-btn ${secondsLeft === 0 ? 'enabled' : 'disabled'}`}
+                  disabled={secondsLeft > 0 || isClaiming}
+                  onClick={handleClaimChips}
+                >
+                  {isClaiming ? 'กำลังประมวลผล...' : (secondsLeft > 0 ? `กรุณารอ... (${secondsLeft} วินาที)` : '🎁 กดรับชิปฟรี $1,000')}
+                </button>
               </div>
             </div>
           </div>

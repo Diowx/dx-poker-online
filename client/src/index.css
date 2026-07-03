@@ -1860,3 +1860,178 @@ body {
 .animate-bubbleIn {
   animation: bubbleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+/* === SPONSOR REWARDED CHIPS STYLING === */
+
+/* Broke warning row for spectators */
+.spectator-broke-row {
+  border: 1px dashed rgba(212, 175, 55, 0.4) !important;
+  background: rgba(212, 175, 55, 0.04) !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 12px;
+}
+
+.broke-text-warning {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+}
+
+.claim-free-btn {
+  padding: 8px 18px !important;
+  border-radius: 6px !important;
+  font-size: 0.85rem !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.claim-free-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6) !important;
+}
+
+/* Sponsor modal layout */
+.sponsor-modal {
+  max-width: 420px !important;
+  background: linear-gradient(135deg, #181824 0%, #0c0c12 100%) !important;
+  border: 1.5px solid var(--gold) !important;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.25) !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.sponsor-instruction {
+  font-size: 0.95rem;
+  color: #c9c9d4;
+  margin-bottom: 12px;
+}
+
+.timer-seconds {
+  color: #ffd700;
+  font-size: 1.15rem;
+  margin: 0 3px;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #aa800e 100%);
+  transition: width 1s linear;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Simulated Ad Banner */
+.sponsor-ad-container {
+  margin: 15px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sponsor-ad-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+.simulated-ad-banner {
+  width: 100%;
+  min-height: 180px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.ad-content-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  width: 100%;
+}
+
+.ad-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.ad-desc {
+  font-size: 0.8rem;
+  color: #a4a4b5;
+  line-height: 1.4;
+  max-width: 260px;
+}
+
+.ad-button {
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+  transition: all 0.2s ease-in-out;
+}
+
+.ad-button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Claim Button */
+.claim-chips-btn {
+  width: 100%;
+  padding: 14px !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+}
+
+.claim-chips-btn.disabled {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  cursor: not-allowed;
+}
+
+.claim-chips-btn.enabled {
+  background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%) !important;
+  color: #000 !important;
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.45), 0 0 10px rgba(255, 215, 0, 0.3) !important;
+  transform: scale(1);
+}
+
+.claim-chips-btn.enabled:hover {
+  transform: scale(1.02) translateY(-1px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.55), 0 0 15px rgba(255, 215, 0, 0.4) !important;
+}

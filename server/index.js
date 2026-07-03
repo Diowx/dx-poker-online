@@ -263,6 +263,30 @@ io.on('connection', (socket) => {
     broadcastRoomState(room);
   });
 
+  // 8.5. Claim Free Chips from Sponsor
+  socket.on('claim-free-chips', (callback) => {
+    if (!currentRoomId) return callback({ success: false, message: 'ไม่ได้อยู่ในห้องเล่นเกม' });
+    const room = rooms[currentRoomId];
+    if (!room) return callback({ success: false, message: 'ไม่พบห้องเล่นเกม' });
+
+    const player = room.players[socket.id];
+    if (!player) return callback({ success: false, message: 'ไม่พบข้อมูลผู้เล่น' });
+
+    // ความปลอดภัย: เช็คยอดเงินจริงบนเซิร์ฟเวอร์ว่าหมดตัวแล้วจริง
+    const currentChips = player.chips || 0;
+    if (currentChips > 0) {
+      return callback({ success: false, message: 'คุณยังมีชิปเหลืออยู่ ไม่สามารถรับชิปฟรีได้' });
+    }
+
+    const success = room.claimFreeChips(socket.id);
+    if (success) {
+      broadcastRoomState(room);
+      callback({ success: true, newChips: player.chips });
+    } else {
+      callback({ success: false, message: 'เกิดข้อผิดพลาดในการรับชิปฟรี' });
+    }
+  });
+
   // 9. Disconnect
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);

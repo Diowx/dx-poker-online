@@ -50,7 +50,7 @@ class GameRoom {
       id: socketId,
       name: name,
       avatar: avatar,
-      chips: 0,
+      chips: this.defaultBuyIn,
       seatIndex: -1,
       cards: [],
       isReady: false,
@@ -107,13 +107,12 @@ class GameRoom {
     if (this.seats[seatIndex] !== null) return false; // Seat taken
     if (player.seatIndex !== -1) return false; // Player already seated
 
-    // กำหนดจำนวนชิป: ถ้ามีชิปเก่าค้างอยู่ (> 0) จะดึงยอดชิปเก่ามาใช้ทันทีเพื่อรักษากฎความโปร่งใส ป้องกันการจงใจเพิ่ม/ลดชิป
-    if (player.chips && player.chips > 0) {
-      this.log(`${player.name} sat down again at seat ${seatIndex + 1} with their remaining stack of $${player.chips}.`);
-    } else {
-      player.chips = this.defaultBuyIn;
-      this.log(`${player.name} sat at seat ${seatIndex + 1} with default buy-in of $${player.chips}.`);
+    // กำหนดจำนวนชิป: ต้องมีชิปเก่าค้างอยู่จริง (> 0) เพื่ออนุญาตให้นั่งเล่นได้ (ถ้าเป็น 0 ต้องผ่านสปอนเซอร์ก่อน)
+    if (!player.chips || player.chips <= 0) {
+      return false;
     }
+
+    this.log(`${player.name} sat down at seat ${seatIndex + 1} with their stack of $${player.chips}.`);
 
     player.seatIndex = seatIndex;
     this.seats[seatIndex] = socketId;
@@ -167,6 +166,23 @@ class GameRoom {
       this.log(`${player.name} requested a rebuy of $${topUp} (will be added next hand).`);
       return true;
     }
+  }
+
+  claimFreeChips(socketId) {
+    const player = this.players[socketId];
+    if (!player) return false;
+
+    // ระบบความปลอดภัย: อนุญาตให้เคลมได้เฉพาะเมื่อไม่มีชิปเหลืออยู่เลยจริงๆ เท่านั้น
+    const currentChips = player.chips || 0;
+    if (currentChips > 0) return false;
+
+    player.chips = 1000;
+    this.log(`${player.name} claimed $1,000 free chips from Sponsor.`);
+
+    if (this.gameState === 'LOBBY') {
+      this.checkLobbyStatus();
+    }
+    return true;
   }
 
   setReady(socketId, isReady) {
