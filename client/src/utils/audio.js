@@ -174,22 +174,22 @@ export const playLobbyCountdownAlert = (isFinal = false) => {
         osc.stop(now + tone.delay + tone.duration);
       });
     } else {
-      // เสียงติ๊กนับถอยหลังสั้นๆ เบาๆ (Soft high-pitched clock pip)
+      // เสียงติ๊กนับถอยหลังสั้นๆ (Clear clock tick)
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800.00, now); // 800Hz beep
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(700.00, now); // 700Hz beep
 
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.04, now + 0.005);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      gain.gain.linearRampToValueAtTime(0.15, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.06);
+      osc.stop(now + 0.1);
     }
   } catch (e) {
     console.warn("Audio play blocked or failed: ", e);

@@ -33,8 +33,9 @@ function App() {
             if (['PRE_FLOP', 'FLOP', 'TURN', 'RIVER'].includes(newRoomState.gameState)) {
               playCardDeal();
             }
-            if (newRoomState.gameState !== 'SHOWDOWN') {
-              // Reset showdown info when not in showdown
+            if (newRoomState.gameState === 'PRE_FLOP' || 
+                (newRoomState.gameState === 'LOBBY' && newRoomState.lobbyCountdown === null)) {
+              // ล้างข้อมูลไพ่เมื่อเริ่มแจกไพ่ตาใหม่ หรือเมื่อยกเลิกตัวนับเวลาหน้า Lobby
               setShowdownOpponentCards(null);
               setShowdownResults([]);
             }
