@@ -133,8 +133,7 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
                 { id: 'red', name: 'แดงคลาสสิก' },
                 { id: 'blue', name: 'น้ำเงินรอยัล' },
                 { id: 'black', name: 'ดำคาร์บอน' },
-                { id: 'gold', name: 'ทองคำหรู' },
-                { id: 'green', name: 'เขียวมรกต' }
+                { id: 'gold', name: 'ทองคำหรู' }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -147,13 +146,12 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
                   title={opt.name}
                 >
                   <div className="cardback-preview">
-                    <div className="poker-card back mini-card">
+                    <div className={`poker-card back mini-card ${opt.id}`}>
                       <div className="card-back-pattern">
                         <div className="pattern-inner"></div>
                       </div>
                     </div>
                   </div>
-                  <span className="cardback-name">{opt.name}</span>
                 </button>
               ))}
             </div>
