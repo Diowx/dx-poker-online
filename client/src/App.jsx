@@ -16,6 +16,7 @@ function App() {
   // Showdown state persistence
   const [showdownOpponentCards, setShowdownOpponentCards] = useState(null);
   const [showdownResults, setShowdownResults] = useState([]);
+  const [cardBack, setCardBack] = useState('red'); // 'red', 'blue', 'black', 'gold', 'green'
 
   useEffect(() => {
     // Listen for socket events
@@ -163,9 +164,14 @@ function App() {
   };
 
   return (
-    <div className="app-layout">
+    <div className={`app-layout deck-${cardBack}`}>
       {view === 'lobby' ? (
-        <Lobby onRoomJoined={handleRoomJoined} onOpenRankings={() => setIsRankingsOpen(true)} />
+        <Lobby 
+          onRoomJoined={handleRoomJoined} 
+          onOpenRankings={() => setIsRankingsOpen(true)}
+          cardBack={cardBack}
+          onSelectCardBack={setCardBack}
+        />
       ) : (
         roomState && (
           <div className="game-screen-wrapper">

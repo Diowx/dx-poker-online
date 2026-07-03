@@ -3,7 +3,7 @@ import { socket } from '../socket';
 import { playChipBet } from '../utils/audio';
 import { AvatarIcon, AVATAR_LIST } from './AvatarIcon';
 
-function Lobby({ onRoomJoined, onOpenRankings }) {
+function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
   const [playerName, setPlayerName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState('m1');
   const [roomCode, setRoomCode] = useState('');
@@ -121,6 +121,39 @@ function Lobby({ onRoomJoined, onOpenRankings }) {
                   title={avatar.name}
                 >
                   <AvatarIcon id={avatar.id} size={42} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label>เลือกลายหลังไพ่ของคุณ (Card Back Selection)</label>
+            <div className="cardback-selector-grid">
+              {[
+                { id: 'red', name: 'แดงคลาสสิก' },
+                { id: 'blue', name: 'น้ำเงินรอยัล' },
+                { id: 'black', name: 'ดำคาร์บอน' },
+                { id: 'gold', name: 'ทองคำหรู' },
+                { id: 'green', name: 'เขียวมรกต' }
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  className={`cardback-selector-btn ${cardBack === opt.id ? 'selected' : ''}`}
+                  onClick={() => {
+                    playChipBet();
+                    onSelectCardBack(opt.id);
+                  }}
+                  title={opt.name}
+                >
+                  <div className="cardback-preview">
+                    <div className="poker-card back mini-card">
+                      <div className="card-back-pattern">
+                        <div className="pattern-inner"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="cardback-name">{opt.name}</span>
                 </button>
               ))}
             </div>

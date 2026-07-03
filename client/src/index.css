@@ -1675,3 +1675,145 @@ body {
   margin-top: 10px;
   border-left: 3px solid var(--gold-dark);
 }
+
+/* CARDBACK SELECTOR GRID (Lobby) */
+.cardback-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.cardback-selector-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardback-selector-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.cardback-selector-btn.selected {
+  border-color: var(--gold) !important;
+  background: rgba(212, 175, 55, 0.08) !important;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+}
+
+.cardback-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mini card styling for preview */
+.mini-card {
+  width: 32px !important;
+  height: 45px !important;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  animation: none !important;
+  padding: 2px !important;
+}
+
+.cardback-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ccc;
+  white-space: nowrap;
+}
+
+.cardback-selector-btn.selected .cardback-name {
+  color: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .cardback-selector-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
+/* === 5 CARDBACK STYLES === */
+
+/* 1. Red Classique */
+.deck-red .poker-card.back {
+  background: #b71c1c !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.deck-red .card-back-pattern {
+  background-color: #b71c1c;
+  background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0),
+                    radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+/* 2. Royal Blue */
+.deck-blue .poker-card.back {
+  background: #0d47a1 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+.deck-blue .card-back-pattern {
+  background-color: #0d47a1;
+  background-image: linear-gradient(45deg, rgba(255,215,0,0.1) 25%, transparent 25%),
+                    linear-gradient(-45deg, rgba(255,215,0,0.1) 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, rgba(255,215,0,0.1) 75%),
+                    linear-gradient(-45deg, transparent 75%, rgba(255,215,0,0.1) 75%);
+  background-size: 10px 10px;
+}
+
+/* 3. Carbon Fiber Black */
+.deck-black .poker-card.back {
+  background: #111115 !important;
+  color: #fff !important;
+  border: 1px solid rgba(212, 175, 55, 0.35) !important;
+}
+.deck-black .card-back-pattern {
+  background-color: #111115;
+  background-image: linear-gradient(315deg, #1f1f24 25%, transparent 25%), 
+                    linear-gradient(45deg, #1f1f24 25%, transparent 25%), 
+                    linear-gradient(225deg, #1f1f24 25%, transparent 25%), 
+                    linear-gradient(135deg, #1f1f24 25%, transparent 25%);
+  background-size: 6px 6px;
+}
+
+/* 4. Gold Fortune */
+.deck-gold .poker-card.back {
+  background: linear-gradient(135deg, #d4af37 0%, #aa800e 100%) !important;
+  color: #000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+.deck-gold .card-back-pattern {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08) 2px, transparent 2px, transparent 8px);
+}
+
+/* 5. Emerald Velvet */
+.deck-green .poker-card.back {
+  background: #1b5e20 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+.deck-green .card-back-pattern {
+  background-color: #1b5e20;
+  background-image: radial-gradient(rgba(255,255,255,0.08) 9px, transparent 10px),
+                    repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 10px);
+  background-size: 12px 12px;
+}
