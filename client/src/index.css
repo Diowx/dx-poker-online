@@ -485,8 +485,8 @@ body {
 }
 
 .community-card-slot {
-  width: 68px;
-  height: 96px;
+  width: 80px;
+  height: 112px;
   position: relative;
 }
 
@@ -500,9 +500,9 @@ body {
 
 /* POKER CARDS */
 .poker-card {
-  width: 68px;
-  height: 96px;
-  border-radius: 6px;
+  width: 80px;
+  height: 112px;
+  border-radius: 7px;
   background: #fff;
   color: #000;
   position: relative;
@@ -513,7 +513,7 @@ body {
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   font-family: var(--font-brand);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
   animation: dealCard 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
@@ -546,11 +546,11 @@ body {
 }
 
 .card-suit {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .card-center-suit {
-  font-size: 2.1rem;
+  font-size: 2.4rem;
   align-self: center;
   margin-top: -5px;
 }
@@ -712,20 +712,20 @@ body {
 }
 
 .pocket-cards .poker-card {
-  width: 52px;
-  height: 74px;
-  font-size: 0.8rem;
-  border-radius: 4px;
+  width: 60px;
+  height: 84px;
+  font-size: 0.85rem;
+  border-radius: 5px;
   padding: 3px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .pocket-cards .poker-card .card-center-suit {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .pocket-cards .poker-card:nth-child(2) {
-  margin-left: -24px;
+  margin-left: -28px;
 }
 
 /* Action badge */
