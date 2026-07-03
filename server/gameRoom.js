@@ -541,10 +541,51 @@ class GameRoom {
       this.collectBets();
 
       this.log(`${winner.name} wins $${this.pot} (everyone else folded).`);
+      
+      // Showdown results for client overlay
+      const showdownResults = [{
+        id: winner.id,
+        name: winner.name,
+        cards: [], // No cards shown since others folded
+        winAmount: this.pot,
+        handName: 'ทุกคนหมอบหมด (Everyone Folded)',
+        handCards: []
+      }];
+
       winner.chips += this.pot;
+
+      if (this.onShowdown) {
+        // Send opponentCards as empty because others folded and cards remain hidden
+        this.onShowdown(showdownResults, {});
+      }
+
       this.pot = 0;
       
-      setTimeout(() => this.startHand(), 5000);
+      // Reset game room state and schedule next hand in 7 seconds
+      setTimeout(() => {
+        this.gameState = 'LOBBY';
+        // Seated players with 0 chips must be stood up or prompt for rebuy
+        this.getSeatedPlayers().forEach(p => {
+          if (p.chips === 0 && !p.queuedRebuy) {
+            this.log(`${p.name} has 0 chips and is stood up.`);
+            this.standPlayer(p.id);
+          }
+        });
+        
+        // ตรวจสอบและเริ่มเวลานับถอยหลังหน้า Lobby 30 วินาทีก่อนตาใหม่จะเริ่มขึ้น
+        const seated = this.getSeatedPlayers();
+        const readyPlayers = seated.filter(p => p.isReady);
+        if (seated.length >= 2 && readyPlayers.length === seated.length) {
+          this.startLobbyCountdown();
+        } else {
+          this.checkLobbyStatus();
+        }
+
+        if (this.onHandComplete) {
+          this.onHandComplete();
+        }
+      }, 7000);
+
       return true;
     }
     return false;
