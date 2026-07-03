@@ -109,8 +109,8 @@ function PlayerSeat({
       <div className="player-avatar-wrapper">
         <div className="player-avatar" style={{ background: 'transparent' }}>
           <AvatarIcon id={player.avatar} size="100%" />
-          {isSelf && <span className="self-tag">ME</span>}
         </div>
+        {isSelf && <span className="self-tag">ME</span>}
         
         {isDealer && <div className="dealer-button">D</div>}
         
