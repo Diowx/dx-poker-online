@@ -263,7 +263,6 @@ class GameRoom {
       p.currentBet = 0;
       p.totalContribution = 0;
       p.talked = false;
-      p.isReady = false; // Reset ready state for next hand
     });
 
     this.gameState = 'PRE_FLOP';
