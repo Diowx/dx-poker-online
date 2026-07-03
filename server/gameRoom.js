@@ -434,16 +434,11 @@ class GameRoom {
   }
 
   handleAutoAction(socketId) {
-    // If it's this player's turn, force them to Check (if currentBet === player.currentBet) or Fold
+    // Force player to Fold when they run out of time (AFK/Inactive)
     const player = this.players[socketId];
     if (!player || player.seatIndex !== this.currentPlayerIndex) return;
 
-    const checkCost = this.currentBet - player.currentBet;
-    if (checkCost === 0) {
-      this.handleAction(socketId, 'check');
-    } else {
-      this.handleAction(socketId, 'fold');
-    }
+    this.handleAction(socketId, 'fold');
 
     if (this.onTurnChange) {
       this.onTurnChange();
