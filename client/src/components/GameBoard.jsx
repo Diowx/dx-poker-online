@@ -81,8 +81,7 @@ function GameBoard({
   };
 
   const handleSitDown = (seatIndex) => {
-    const buyIn = prompt('ป้อนจำนวนชิปเริ่มต้นที่ต้องการซื้อ ($):', room.defaultBuyIn) || room.defaultBuyIn;
-    onRebuy(seatIndex, parseInt(buyIn));
+    onRebuy(seatIndex, null);
   };
 
   // Community cards layout

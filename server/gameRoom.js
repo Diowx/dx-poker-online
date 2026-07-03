@@ -107,13 +107,18 @@ class GameRoom {
     if (this.seats[seatIndex] !== null) return false; // Seat taken
     if (player.seatIndex !== -1) return false; // Player already seated
 
-    // Set chips
-    player.chips = parseInt(buyInAmount) || this.defaultBuyIn;
+    // กำหนดจำนวนชิป: ถ้ามีชิปเก่าค้างอยู่ (> 0) จะดึงยอดชิปเก่ามาใช้ทันทีเพื่อรักษากฎความโปร่งใส ป้องกันการจงใจเพิ่ม/ลดชิป
+    if (player.chips && player.chips > 0) {
+      this.log(`${player.name} sat down again at seat ${seatIndex + 1} with their remaining stack of $${player.chips}.`);
+    } else {
+      player.chips = this.defaultBuyIn;
+      this.log(`${player.name} sat at seat ${seatIndex + 1} with default buy-in of $${player.chips}.`);
+    }
+
     player.seatIndex = seatIndex;
     this.seats[seatIndex] = socketId;
     player.isReady = false;
 
-    this.log(`${player.name} sat at seat ${seatIndex + 1} with $${player.chips}.`);
     this.checkLobbyStatus();
     return true;
   }
@@ -132,8 +137,7 @@ class GameRoom {
     const seat = player.seatIndex;
     this.seats[seat] = null;
     player.seatIndex = -1;
-    player.chips = 0;
-    player.isReady = false;
+    player.isReady = false; // ปิดการล้างค่าชิปเป็น 0 เพื่อจดจำยอดชิปเก่าของผู้เล่นไว้ในสเปกเตเตอร์
 
     this.log(`${player.name} stood up from seat ${seat + 1}.`);
     
