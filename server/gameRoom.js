@@ -603,27 +603,7 @@ class GameRoom {
       
       // Reset game room state and schedule next hand in 7 seconds
       setTimeout(() => {
-        this.gameState = 'LOBBY';
-        // Seated players with 0 chips must be stood up or prompt for rebuy
-        this.getSeatedPlayers().forEach(p => {
-          if (p.chips === 0 && !p.queuedRebuy) {
-            this.log(`${p.name} has 0 chips and is stood up.`);
-            this.standPlayer(p.id);
-          }
-        });
-        
-        // ตรวจสอบและเริ่มเวลานับถอยหลังหน้า Lobby 30 วินาทีก่อนตาใหม่จะเริ่มขึ้น
-        const seated = this.getSeatedPlayers();
-        const readyPlayers = seated.filter(p => p.isReady);
-        if (seated.length >= 2 && readyPlayers.length === seated.length) {
-          this.startLobbyCountdown();
-        } else {
-          this.checkLobbyStatus();
-        }
-
-        if (this.onHandComplete) {
-          this.onHandComplete();
-        }
+        this.handleHandEndTransition();
       }, 7000);
 
       return true;
@@ -866,59 +846,7 @@ class GameRoom {
 
     // Reset game room state and schedule next hand in 7 seconds
     setTimeout(() => {
-      // ตรวจสอบหากสิ้นสุดการแข่งขันในโหมดทัวร์นาเมนต์
-      if (this.gameMode === 'tournament' && this.currentHandCount >= this.maxHands) {
-        this.gameState = 'GAME_OVER';
-
-        // เรียงลำดับแชมป์เปี้ยนผู้มีกำไรสุทธิสูงสุด
-        const seated = this.getSeatedPlayers();
-        this.winnersLeaderboard = seated.map(p => {
-          const totalBuyIn = p.totalBuyIn || this.defaultBuyIn;
-          const netProfit = p.chips - totalBuyIn;
-          return {
-            id: p.id,
-            name: p.name,
-            avatar: p.avatar,
-            chips: p.chips,
-            totalBuyIn: totalBuyIn,
-            netProfit: netProfit
-          };
-        }).sort((a, b) => {
-          if (b.netProfit !== a.netProfit) {
-            return b.netProfit - a.netProfit;
-          }
-          return b.chips - a.chips; // หากกำไรสุทธิเท่ากัน ตัดสินด้วยจำนวนชิปที่เหลืออยู่จริง
-        });
-
-        this.log(`Tournament complete! Champion: ${this.winnersLeaderboard[0]?.name || 'None'} with Net Profit of $${this.winnersLeaderboard[0]?.netProfit || 0}`);
-
-        if (this.onHandComplete) {
-          this.onHandComplete();
-        }
-        return; // ห้ามเริ่มตาใหม่หรือนับถอยหลังใดๆ ทั้งสิ้น
-      }
-
-      this.gameState = 'LOBBY';
-      // Seated players with 0 chips must be stood up or prompt for rebuy
-      this.getSeatedPlayers().forEach(p => {
-        if (p.chips === 0 && !p.queuedRebuy) {
-          this.log(`${p.name} has 0 chips and is stood up.`);
-          this.standPlayer(p.id);
-        }
-      });
-
-      // ตรวจสอบและเริ่มเวลานับถอยหลังหน้า Lobby 30 วินาทีก่อนตาใหม่จะเริ่มขึ้น
-      const seated = this.getSeatedPlayers();
-      const readyPlayers = seated.filter(p => p.isReady);
-      if (seated.length >= 2 && readyPlayers.length === seated.length) {
-        this.startLobbyCountdown();
-      } else {
-        this.checkLobbyStatus();
-      }
-
-      if (this.onHandComplete) {
-        this.onHandComplete();
-      }
+      this.handleHandEndTransition();
     }, 7000);
   }
 
@@ -984,6 +912,62 @@ class GameRoom {
     const player = this.players[socketId];
     if (!player) return 0;
     return player.chips + player.currentBet;
+  }
+
+  handleHandEndTransition() {
+    // ตรวจสอบหากสิ้นสุดการแข่งขันในโหมดทัวร์นาเมนต์
+    if (this.gameMode === 'tournament' && this.currentHandCount >= this.maxHands) {
+      this.gameState = 'GAME_OVER';
+
+      // เรียงลำดับแชมป์เปี้ยนผู้มีกำไรสุทธิสูงสุด
+      const seated = this.getSeatedPlayers();
+      this.winnersLeaderboard = seated.map(p => {
+        const totalBuyIn = p.totalBuyIn || this.defaultBuyIn;
+        const netProfit = p.chips - totalBuyIn;
+        return {
+          id: p.id,
+          name: p.name,
+          avatar: p.avatar,
+          chips: p.chips,
+          totalBuyIn: totalBuyIn,
+          netProfit: netProfit
+        };
+      }).sort((a, b) => {
+        if (b.netProfit !== a.netProfit) {
+          return b.netProfit - a.netProfit;
+        }
+        return b.chips - a.chips; // หากกำไรสุทธิเท่ากัน ตัดสินด้วยจำนวนชิปที่เหลืออยู่จริง
+      });
+
+      this.log(`Tournament complete! Champion: ${this.winnersLeaderboard[0]?.name || 'None'} with Net Profit of $${this.winnersLeaderboard[0]?.netProfit || 0}`);
+
+      if (this.onHandComplete) {
+        this.onHandComplete();
+      }
+      return; // ห้ามเริ่มตาใหม่หรือนับถอยหลังใดๆ ทั้งสิ้น
+    }
+
+    this.gameState = 'LOBBY';
+    // Seated players with 0 chips must be stood up or prompt for rebuy
+    this.getSeatedPlayers().forEach(p => {
+      if (p.chips === 0 && !p.queuedRebuy) {
+        this.log(`${p.name} has 0 chips and is stood up.`);
+        this.standPlayer(p.id);
+      }
+    });
+
+    // ตรวจสอบและเริ่มเวลานับถอยหลังหน้า Lobby 30 วินาทีก่อนตาใหม่จะเริ่มขึ้น
+    const seated = this.getSeatedPlayers();
+    const readyPlayers = seated.filter(p => p.isReady);
+    if (seated.length >= 2 && readyPlayers.length === seated.length) {
+      this.startLobbyCountdown();
+    } else {
+      this.checkLobbyStatus();
+    }
+
+    if (this.onHandComplete) {
+      this.onHandComplete();
+    }
   }
 
   resetTournament() {
