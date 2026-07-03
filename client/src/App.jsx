@@ -33,8 +33,8 @@ function App() {
             if (['PRE_FLOP', 'FLOP', 'TURN', 'RIVER'].includes(newRoomState.gameState)) {
               playCardDeal();
             }
-            if (newRoomState.gameState === 'LOBBY') {
-              // Reset showdown info when entering lobby
+            if (newRoomState.gameState !== 'SHOWDOWN') {
+              // Reset showdown info when not in showdown
               setShowdownOpponentCards(null);
               setShowdownResults([]);
             }
