@@ -810,6 +810,7 @@ body {
   backdrop-filter: blur(5px);
   z-index: 10;
   pointer-events: auto;
+  transform: translateY(-105px); /* ขยับขึ้นด้านบนเพื่อหลบไพ่กองกลาง */
 }
 
 .showdown-title {

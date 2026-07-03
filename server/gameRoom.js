@@ -554,9 +554,15 @@ class GameRoom {
 
       winner.chips += this.pot;
 
+      const opponentCards = {};
+      this.getSeatedPlayers().forEach(p => {
+        if (p.cards && p.cards.length > 0) {
+          opponentCards[p.id] = p.cards;
+        }
+      });
+
       if (this.onShowdown) {
-        // Send opponentCards as empty because others folded and cards remain hidden
-        this.onShowdown(showdownResults, {});
+        this.onShowdown(showdownResults, opponentCards);
       }
 
       this.pot = 0;
@@ -812,8 +818,10 @@ class GameRoom {
 
     // Send others' cards to client for final display
     const opponentCards = {};
-    activePlayers.forEach(p => {
-      opponentCards[p.id] = p.cards;
+    this.getSeatedPlayers().forEach(p => {
+      if (p.cards && p.cards.length > 0) {
+        opponentCards[p.id] = p.cards;
+      }
     });
 
     if (this.onShowdown) {

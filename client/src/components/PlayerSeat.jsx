@@ -57,10 +57,6 @@ function PlayerSeat({
 
   // Pocket cards to render
   const renderCards = () => {
-    // If cards are hidden and not folded, they are sent as [true, true] or [c1, c2]
-    // If player folded, we don't draw cards, or draw dimmed
-    if (player.isFolded) return null;
-    
     let cardsToUse = player.cards;
     
     // If we have showdown cards for opponents, use them
@@ -69,6 +65,10 @@ function PlayerSeat({
     }
 
     if (!cardsToUse || cardsToUse.length === 0) return null;
+
+    // ถ้ายอมแพ้/หมอบไปแล้ว จะแสดงก็ต่อเมื่อจบเกมและเผยไพ่ทุกคน (showdownOpponentCards มีค่าของคนๆ นี้)
+    const showEvenIfFolded = showdownOpponentCards && showdownOpponentCards[player.id];
+    if (player.isFolded && !showEvenIfFolded) return null;
 
     return (
       <div className="pocket-cards">
