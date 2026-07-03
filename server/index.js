@@ -108,6 +108,10 @@ io.on('connection', (socket) => {
       io.to(roomId).emit('timer-update', { timeLeft, currentPlayerIndex: room.currentPlayerIndex });
     };
 
+    room.onLobbyTimerUpdate = (timeLeft) => {
+      broadcastRoomState(room);
+    };
+
     room.onShowdown = (results, opponentCards) => {
       io.to(roomId).emit('showdown-results', { results, opponentCards });
       broadcastRoomState(room);

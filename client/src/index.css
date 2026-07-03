@@ -1392,3 +1392,51 @@ body {
     height: 90%;
   }
 }
+
+/* LOBBY COUNTDOWN TIMER Felt Overlay */
+.lobby-countdown-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.countdown-title {
+  font-family: var(--font-brand);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.countdown-number {
+  font-family: var(--font-brand);
+  font-size: 5.5rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+  animation: pulseTimer 1s infinite alternate;
+}
+
+.countdown-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin-top: 5px;
+}
+
+@keyframes pulseTimer {
+  from {
+    transform: scale(0.96);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+  to {
+    transform: scale(1.04);
+    text-shadow: 0 0 35px rgba(212, 175, 55, 0.7);
+  }
+}

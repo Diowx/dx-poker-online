@@ -188,10 +188,18 @@ function GameBoard({
             )}
 
             {room.gameState === 'LOBBY' && (
-              <div className="lobby-waiting-overlay">
-                <h3>รอผู้เล่นให้พร้อมเพื่อเริ่มเกม</h3>
-                <p>จำนวนที่นั่งเล่นปัจจุบัน: {room.seats.filter(s => s !== null).length}/6 คน</p>
-              </div>
+              room.lobbyCountdown !== null && room.lobbyCountdown !== undefined ? (
+                <div className="lobby-countdown-overlay animate-fadeIn">
+                  <div className="countdown-title">เกมถัดไปกำลังจะเริ่มใน</div>
+                  <div className="countdown-number">{room.lobbyCountdown}</div>
+                  <div className="countdown-subtitle">วินาที</div>
+                </div>
+              ) : (
+                <div className="lobby-waiting-overlay">
+                  <h3>รอผู้เล่นให้พร้อมเพื่อเริ่มเกม</h3>
+                  <p>จำนวนที่นั่งเล่นปัจจุบัน: {room.seats.filter(s => s !== null).length}/6 คน</p>
+                </div>
+              )
             )}
           </div>
         </div>

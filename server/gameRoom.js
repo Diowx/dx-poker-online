@@ -29,6 +29,8 @@ class GameRoom {
     this.currentPlayerIndex = -1; // Seat index of player whose turn it is
     this.actionTimer = null;
     this.timerTimeLeft = 0;
+    this.lobbyCountdown = null;
+    this.lobbyCountdownInterval = null;
     
     // Game logs / Chat logs
     this.gameLogs = [];
@@ -132,6 +134,7 @@ class GameRoom {
     this.log(`${player.name} stood up from seat ${seat + 1}.`);
     
     if (this.gameState === 'LOBBY') {
+      this.checkLobbyCountdownCancel();
       this.checkLobbyStatus();
     } else {
       this.checkActivePlayers();
@@ -165,8 +168,17 @@ class GameRoom {
     player.isReady = isReady;
     this.log(`${player.name} is ${isReady ? 'READY' : 'NOT READY'}.`);
     
-    // Check if we can start
-    this.checkLobbyStatus();
+    if (this.gameState === 'LOBBY') {
+      const seated = this.getSeatedPlayers();
+      const readyPlayers = seated.filter(p => p.isReady);
+      if (isReady && seated.length >= 2 && readyPlayers.length === seated.length) {
+        if (this.lobbyCountdown === null) {
+          this.startLobbyCountdown();
+        }
+      } else {
+        this.checkLobbyCountdownCancel();
+      }
+    }
   }
 
   checkLobbyStatus() {
@@ -773,11 +785,71 @@ class GameRoom {
           this.standPlayer(p.id);
         }
       });
-      this.checkLobbyStatus();
+
+      // ตรวจสอบและเริ่มเวลานับถอยหลังหน้า Lobby 30 วินาทีก่อนตาใหม่จะเริ่มขึ้น
+      const seated = this.getSeatedPlayers();
+      const readyPlayers = seated.filter(p => p.isReady);
+      if (seated.length >= 2 && readyPlayers.length === seated.length) {
+        this.startLobbyCountdown();
+      } else {
+        this.checkLobbyStatus();
+      }
+
       if (this.onHandComplete) {
         this.onHandComplete();
       }
     }, 7000);
+  }
+
+  startLobbyCountdown() {
+    this.clearLobbyCountdown();
+    
+    const seated = this.getSeatedPlayers();
+    const readyPlayers = seated.filter(p => p.isReady);
+    
+    if (seated.length >= 2 && readyPlayers.length === seated.length) {
+      this.lobbyCountdown = 30; // 30 seconds
+      this.log(`Next hand starting in ${this.lobbyCountdown} seconds.`);
+      
+      if (this.onLobbyTimerUpdate) {
+        this.onLobbyTimerUpdate(this.lobbyCountdown);
+      }
+      
+      this.lobbyCountdownInterval = setInterval(() => {
+        this.lobbyCountdown--;
+        
+        if (this.onLobbyTimerUpdate) {
+          this.onLobbyTimerUpdate(this.lobbyCountdown);
+        }
+        
+        if (this.lobbyCountdown <= 0) {
+          this.clearLobbyCountdown();
+          this.startHand();
+        }
+      }, 1000);
+    }
+  }
+
+  clearLobbyCountdown() {
+    if (this.lobbyCountdownInterval) {
+      clearInterval(this.lobbyCountdownInterval);
+      this.lobbyCountdownInterval = null;
+    }
+    this.lobbyCountdown = null;
+  }
+
+  checkLobbyCountdownCancel() {
+    if (this.lobbyCountdown !== null) {
+      const seated = this.getSeatedPlayers();
+      const readyPlayers = seated.filter(p => p.isReady);
+      if (seated.length < 2 || readyPlayers.length < 2 || readyPlayers.length !== seated.length) {
+        this.clearLobbyCountdown();
+        this.log("Lobby countdown cancelled.");
+        if (this.onLobbyTimerUpdate) {
+          this.onLobbyTimerUpdate(null);
+        }
+      }
+    }
   }
 
   // Helper for manual raise checks
