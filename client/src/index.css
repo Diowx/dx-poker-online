@@ -2035,3 +2035,297 @@ body {
   transform: scale(1.02) translateY(-1px);
   box-shadow: 0 8px 25px rgba(255, 215, 0, 0.55), 0 0 15px rgba(255, 215, 0, 0.4) !important;
 }
+
+/* === TOURNAMENT CHAMPIONS PODIUM STYLING === */
+
+/* Inline status styles */
+.font-gold {
+  color: #ffd700 !important;
+}
+
+.font-bold {
+  font-weight: bold !important;
+}
+
+/* Champions Overlay */
+.champions-ceremony-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+}
+
+.champions-ceremony-content {
+  max-width: 600px !important;
+  background: linear-gradient(135deg, #161622 0%, #08080c 100%) !important;
+  border: 2px solid var(--gold) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 175, 55, 0.35) !important;
+  border-radius: 24px !important;
+  padding: 30px !important;
+  text-align: center;
+}
+
+.ceremony-header {
+  margin-bottom: 25px;
+}
+
+.trophy-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.ceremony-header h2 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffd700 50%, #aa800e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+
+.ceremony-subtitle {
+  color: #a4a4b5;
+  font-size: 0.9rem;
+}
+
+/* Podium Layout */
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 250px;
+  margin: 30px 0;
+  gap: 15px;
+}
+
+.podium-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+}
+
+.podium-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.podium-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid #a4a4b5;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.champion-crown {
+  font-size: 1.8rem;
+  margin-bottom: -4px;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.champion-avatar {
+  width: 72px;
+  height: 72px;
+  border: 3px solid #ffd700 !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4) !important;
+}
+
+.podium-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #c9c9d4;
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.champion-name {
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.podium-chips {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a4a4b5;
+}
+
+.champion-chips {
+  font-size: 0.85rem;
+  color: #ffd700;
+}
+
+/* Podium Pillars */
+.podium-pillar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.pillar-1 {
+  height: 120px;
+  background: linear-gradient(180deg, #ffd700 0%, #aa800e 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pillar-2 {
+  height: 85px;
+  background: linear-gradient(180deg, #a4a4b5 0%, #6b6b77 100%);
+  border: 1px solid rgba(164, 164, 181, 0.3);
+}
+
+.pillar-3 {
+  height: 60px;
+  background: linear-gradient(180deg, #cd7f32 0%, #8c521a 100%);
+  border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+.place-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Other Rankings list */
+.other-rankings-container {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 25px;
+  text-align: left;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+.other-rankings-container h4 {
+  font-size: 0.8rem;
+  color: #8a8a9e;
+  margin-top: 0;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.other-rankings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.other-ranking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #c9c9d4;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.rank-badge {
+  font-weight: bold;
+  color: #8a8a9e;
+  width: 30px;
+}
+
+.rank-name {
+  flex-grow: 1;
+}
+
+.rank-chips {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Ceremony Actions buttons */
+.ceremony-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.ceremony-btn {
+  padding: 12px 24px !important;
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.restart-btn {
+  background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3) !important;
+}
+
+.restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5) !important;
+}
+
+.leave-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #c9c9d4 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leave-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.waiting-host-restart {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.loading-dots-text {
+  font-size: 0.85rem;
+  color: #ffd700;
+  font-weight: 700;
+}
+
+/* Podium Entry Animations */
+@keyframes slideUp {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+}
+
+.animate-slideUpDelay {
+  animation: slideUp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.2s forwards;
+  opacity: 0; /* Keep hidden until animation starts */
+}

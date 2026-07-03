@@ -82,6 +82,10 @@ function getCleanedGameState(room, clientSocketId) {
     timerTimeLeft: room.timerTimeLeft,
     lobbyCountdown: room.lobbyCountdown,
     cardBack: room.cardBack,
+    gameMode: room.gameMode,
+    maxHands: room.maxHands,
+    currentHandCount: room.currentHandCount,
+    winnersLeaderboard: room.winnersLeaderboard,
     gameLogs: room.gameLogs.slice(-30) // Only send the last 30 logs to reduce bandwidth
   };
 }
@@ -285,6 +289,18 @@ io.on('connection', (socket) => {
     } else {
       callback({ success: false, message: 'เกิดข้อผิดพลาดในการรับชิปฟรี' });
     }
+  });
+
+  // 8.6. Reset Tournament
+  socket.on('reset-tournament', (callback) => {
+    if (!currentRoomId) return callback({ success: false, message: 'ไม่ได้อยู่ในห้องเล่นเกม' });
+    const room = rooms[currentRoomId];
+    if (!room) return callback({ success: false, message: 'ไม่พบห้องเล่นเกม' });
+    if (socket.id !== room.hostId) return callback({ success: false, message: 'เฉพาะผู้สร้างห้องเท่านั้นที่ทำรายการนี้ได้' });
+
+    room.resetTournament();
+    broadcastRoomState(room);
+    callback({ success: true });
   });
 
   // 9. Disconnect

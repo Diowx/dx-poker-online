@@ -11,6 +11,8 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
   const [defaultBuyIn, setDefaultBuyIn] = useState(1000);
   const [useTimer, setUseTimer] = useState(true);
   const [turnDuration, setTurnDuration] = useState(30);
+  const [gameMode, setGameMode] = useState('free'); // 'free' or 'tournament'
+  const [maxHands, setMaxHands] = useState(10);
   const [activeTab, setActiveTab] = useState('join'); // 'join' or 'create'
   const [error, setError] = useState('');
 
@@ -31,7 +33,9 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
       useTimer,
       turnDuration: parseInt(turnDuration),
       avatar: selectedAvatar,
-      cardBack: cardBack
+      cardBack: cardBack,
+      gameMode: gameMode,
+      maxHands: gameMode === 'tournament' ? maxHands : 0
     }, (response) => {
       if (response.success) {
         onRoomJoined(response.roomId, playerName.trim());
@@ -208,6 +212,36 @@ function Lobby({ onRoomJoined, onOpenRankings, cardBack, onSelectCardBack }) {
                     required
                   />
                 </div>
+              </div>
+
+              <div className="form-grid">
+                <div className="input-group">
+                  <label htmlFor="game-mode">โหมดการเล่น (Game Mode)</label>
+                  <select 
+                    id="game-mode"
+                    value={gameMode}
+                    onChange={(e) => setGameMode(e.target.value)}
+                  >
+                    <option value="free">เล่นแบบอิสระ (Free Play)</option>
+                    <option value="tournament">แข่งทัวร์นาเมนต์จำกัดตา</option>
+                  </select>
+                </div>
+                {gameMode === 'tournament' && (
+                  <div className="input-group">
+                    <label htmlFor="max-hands">จำนวนตาเล่นทั้งหมด</label>
+                    <select 
+                      id="max-hands"
+                      value={maxHands}
+                      onChange={(e) => setMaxHands(parseInt(e.target.value))}
+                    >
+                      <option value={5}>5 ตา</option>
+                      <option value={10}>10 ตา</option>
+                      <option value={15}>15 ตา</option>
+                      <option value={20}>20 ตา</option>
+                      <option value={30}>30 ตา</option>
+                    </select>
+                  </div>
+                )}
               </div>
 
               <div className="form-checkbox-group">

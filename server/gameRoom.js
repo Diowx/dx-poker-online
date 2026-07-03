@@ -12,6 +12,10 @@ class GameRoom {
     this.turnDuration = config.turnDuration !== undefined ? config.turnDuration : 30; // seconds
     this.useTimer = config.useTimer !== undefined ? config.useTimer : true;
     this.cardBack = config.cardBack || 'red';
+    this.gameMode = config.gameMode || 'free'; // 'free' หรือ 'tournament'
+    this.maxHands = config.maxHands || 0;
+    this.currentHandCount = 0;
+    this.winnersLeaderboard = [];
     this.maxPlayers = 6;
 
     // Room state
@@ -266,6 +270,12 @@ class GameRoom {
       this.gameState = 'LOBBY';
       this.log("Not enough players with chips to start a hand.");
       return;
+    }
+
+    // บวกจำนวนตาเมื่อเริ่มแจกไพ่ในโหมดทัวร์นาเมนต์
+    if (this.gameMode === 'tournament') {
+      this.currentHandCount++;
+      this.log(`--- Tournament Hand ${this.currentHandCount} / ${this.maxHands} starts ---`);
     }
 
     // Apply queued rebuys
@@ -852,6 +862,27 @@ class GameRoom {
 
     // Reset game room state and schedule next hand in 7 seconds
     setTimeout(() => {
+      // ตรวจสอบหากสิ้นสุดการแข่งขันในโหมดทัวร์นาเมนต์
+      if (this.gameMode === 'tournament' && this.currentHandCount >= this.maxHands) {
+        this.gameState = 'GAME_OVER';
+
+        // เรียงลำดับแชมป์เปี้ยนผู้มีชิปสูงสุด
+        const seated = this.getSeatedPlayers();
+        this.winnersLeaderboard = seated.map(p => ({
+          id: p.id,
+          name: p.name,
+          avatar: p.avatar,
+          chips: p.chips
+        })).sort((a, b) => b.chips - a.chips);
+
+        this.log(`Tournament complete! Champion: ${this.winnersLeaderboard[0]?.name || 'None'} with $${this.winnersLeaderboard[0]?.chips || 0}`);
+
+        if (this.onHandComplete) {
+          this.onHandComplete();
+        }
+        return; // ห้ามเริ่มตาใหม่หรือนับถอยหลังใดๆ ทั้งสิ้น
+      }
+
       this.gameState = 'LOBBY';
       // Seated players with 0 chips must be stood up or prompt for rebuy
       this.getSeatedPlayers().forEach(p => {
@@ -938,6 +969,27 @@ class GameRoom {
     const player = this.players[socketId];
     if (!player) return 0;
     return player.chips + player.currentBet;
+  }
+
+  resetTournament() {
+    this.gameState = 'LOBBY';
+    this.currentHandCount = 0;
+    this.winnersLeaderboard = [];
+
+    // รีเซ็ตชิปผู้เล่นทุกคนในห้องให้เท่ากับยอด defaultBuyIn เริ่มต้นเพื่อเปิดฤดูกาลแข่งใหม่
+    Object.values(this.players).forEach(p => {
+      p.chips = this.defaultBuyIn;
+      p.isReady = false;
+      p.isFolded = false;
+      p.isAllIn = false;
+      p.currentBet = 0;
+      p.totalContribution = 0;
+      p.queuedRebuy = 0;
+      p.cards = [];
+    });
+
+    this.log("Tournament reset. A new match is ready to start.");
+    this.checkLobbyStatus();
   }
 }
 

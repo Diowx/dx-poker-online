@@ -4,6 +4,7 @@ import Controls from './Controls';
 import Card from './Card';
 import { playChipBet, playWinnerReveal } from '../utils/audio';
 import { socket } from '../socket';
+import { AvatarIcon } from './AvatarIcon';
 
 function GameBoard({
   room,
@@ -67,6 +68,15 @@ function GameBoard({
         setShowSponsorModal(false);
       } else {
         alert(res.message || 'เกิดข้อผิดพลาดในการรับชิปฟรี');
+      }
+    });
+  };
+
+  const handleResetTournament = () => {
+    playChipBet();
+    socket.emit('reset-tournament', (res) => {
+      if (!res.success) {
+        alert(res.message || 'เกิดข้อผิดพลาดในการรีเซ็ตการแข่งขัน');
       }
     });
   };
@@ -182,6 +192,13 @@ function GameBoard({
           <span className="room-divider">|</span>
           <span className="room-label">Small/Big Blind:</span>
           <span className="room-value">${room.smallBlind}/${room.bigBlind}</span>
+          {room.gameMode === 'tournament' && (
+            <>
+              <span className="room-divider">|</span>
+              <span className="room-label font-gold">🏆 แข่งรอบ:</span>
+              <span className="room-value font-gold font-bold">{room.currentHandCount} / {room.maxHands} ตา</span>
+            </>
+          )}
         </div>
 
         <div className="game-header-status">
@@ -421,6 +438,101 @@ function GameBoard({
                   onClick={handleClaimChips}
                 >
                   {isClaiming ? 'กำลังประมวลผล...' : (secondsLeft > 0 ? `กรุณารอ... (${secondsLeft} วินาที)` : '🎁 กดรับชิปฟรี $1,000')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL แสดงพิธีมอบรางวัลแท่นรับรางวัลแชมป์เปี้ยนทัวร์นาเมนต์ */}
+        {room.gameState === 'GAME_OVER' && (
+          <div className="modal-overlay champions-ceremony-overlay animate-fadeIn">
+            <div className="modal-content champions-ceremony-content animate-scaleIn" onClick={e => e.stopPropagation()}>
+              <div className="ceremony-header">
+                <div className="trophy-icon">🏆</div>
+                <h2>TOURNAMENT COMPLETE</h2>
+                <p className="ceremony-subtitle">ทำเนียบทำเนียบแชมป์ผู้ชนะประจำทัวร์นาเมนต์รอบนี้</p>
+              </div>
+              
+              <div className="podium-container">
+                {/* รองอันดับ 1 (โพเดียมฝั่งซ้าย - อันดับ 2) */}
+                {room.winnersLeaderboard[1] && (
+                  <div className="podium-step step-2 animate-slideUp">
+                    <div className="podium-player">
+                      <div className="podium-avatar">
+                        <AvatarIcon id={room.winnersLeaderboard[1].avatar} size={50} />
+                      </div>
+                      <div className="podium-name">{room.winnersLeaderboard[1].name}</div>
+                      <div className="podium-chips">${room.winnersLeaderboard[1].chips.toLocaleString()}</div>
+                    </div>
+                    <div className="podium-pillar pillar-2">
+                      <span className="place-num">2</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* แชมป์ชนะเลิศอันดับ 1 (โพเดียมกลาง - แชมป์เปี้ยน) */}
+                {room.winnersLeaderboard[0] && (
+                  <div className="podium-step step-1 animate-slideUpDelay">
+                    <div className="podium-player">
+                      <div className="champion-crown animate-pulse">👑</div>
+                      <div className="podium-avatar champion-avatar">
+                        <AvatarIcon id={room.winnersLeaderboard[0].avatar} size={65} />
+                      </div>
+                      <div className="podium-name champion-name">{room.winnersLeaderboard[0].name}</div>
+                      <div className="podium-chips champion-chips">${room.winnersLeaderboard[0].chips.toLocaleString()}</div>
+                    </div>
+                    <div className="podium-pillar pillar-1">
+                      <span className="place-num">1</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* รองอันดับ 2 (โพเดียมฝั่งขวา - อันดับ 3) */}
+                {room.winnersLeaderboard[2] && (
+                  <div className="podium-step step-3 animate-slideUp">
+                    <div className="podium-player">
+                      <div className="podium-avatar">
+                        <AvatarIcon id={room.winnersLeaderboard[2].avatar} size={45} />
+                      </div>
+                      <div className="podium-name">{room.winnersLeaderboard[2].name}</div>
+                      <div className="podium-chips">${room.winnersLeaderboard[2].chips.toLocaleString()}</div>
+                    </div>
+                    <div className="podium-pillar pillar-3">
+                      <span className="place-num">3</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ตารางแสดงผู้ร่วมแข่งคนอื่นๆ เพิ่มเติม (อันดับ 4 ลงไป) */}
+              {room.winnersLeaderboard.length > 3 && (
+                <div className="other-rankings-container">
+                  <h4>อันดับผู้เล่นอื่น:</h4>
+                  <div className="other-rankings-list">
+                    {room.winnersLeaderboard.slice(3).map((player, idx) => (
+                      <div key={player.id} className="other-ranking-row">
+                        <span className="rank-badge">#{idx + 4}</span>
+                        <span className="rank-name">{player.name}</span>
+                        <span className="rank-chips">${player.chips.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="ceremony-actions">
+                {isHost ? (
+                  <button className="ceremony-btn restart-btn animate-pulse" onClick={handleResetTournament}>
+                    🔄 เริ่มทัวร์นาเมนต์ใหม่ (Host Only)
+                  </button>
+                ) : (
+                  <div className="waiting-host-restart">
+                    <span className="loading-dots-text animate-pulse">⏳ รอกลุ่มโฮสต์กดสร้างรอบแข่งขันใหม่...</span>
+                  </div>
+                )}
+                <button className="ceremony-btn leave-btn" onClick={onLeaveRoom}>
+                  🚪 ออกจากห้อง (Leave Room)
                 </button>
               </div>
             </div>
