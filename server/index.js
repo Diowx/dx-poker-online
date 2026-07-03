@@ -50,6 +50,7 @@ function getCleanedGameState(room, clientSocketId) {
       name: p.name,
       avatar: p.avatar,
       chips: p.chips,
+      totalBuyIn: p.totalBuyIn || room.defaultBuyIn,
       seatIndex: p.seatIndex,
       isReady: p.isReady,
       isFolded: p.isFolded,

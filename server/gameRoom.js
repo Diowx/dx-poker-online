@@ -55,6 +55,7 @@ class GameRoom {
       name: name,
       avatar: avatar,
       chips: this.defaultBuyIn,
+      totalBuyIn: this.defaultBuyIn,
       seatIndex: -1,
       cards: [],
       isReady: false,
@@ -162,6 +163,7 @@ class GameRoom {
     const topUp = parseInt(buyInAmount) || this.defaultBuyIn;
     if (this.gameState === 'LOBBY') {
       player.chips += topUp;
+      player.totalBuyIn = (player.totalBuyIn || this.defaultBuyIn) + topUp;
       this.log(`${player.name} re-bought for $${topUp}. Total chips: $${player.chips}`);
       return true;
     } else {
@@ -181,6 +183,7 @@ class GameRoom {
     if (currentChips > 0) return false;
 
     player.chips = 1000;
+    player.totalBuyIn = (player.totalBuyIn || this.defaultBuyIn) + 1000;
     this.log(`${player.name} claimed $1,000 free chips from Sponsor.`);
 
     if (this.gameState === 'LOBBY') {
@@ -282,6 +285,7 @@ class GameRoom {
     for (const p of this.getSeatedPlayers()) {
       if (p.queuedRebuy) {
         p.chips += p.queuedRebuy;
+        p.totalBuyIn = (p.totalBuyIn || this.defaultBuyIn) + p.queuedRebuy;
         p.queuedRebuy = 0;
         this.log(`${p.name} refilled chips to $${p.chips}.`);
       }
@@ -866,16 +870,27 @@ class GameRoom {
       if (this.gameMode === 'tournament' && this.currentHandCount >= this.maxHands) {
         this.gameState = 'GAME_OVER';
 
-        // เรียงลำดับแชมป์เปี้ยนผู้มีชิปสูงสุด
+        // เรียงลำดับแชมป์เปี้ยนผู้มีกำไรสุทธิสูงสุด
         const seated = this.getSeatedPlayers();
-        this.winnersLeaderboard = seated.map(p => ({
-          id: p.id,
-          name: p.name,
-          avatar: p.avatar,
-          chips: p.chips
-        })).sort((a, b) => b.chips - a.chips);
+        this.winnersLeaderboard = seated.map(p => {
+          const totalBuyIn = p.totalBuyIn || this.defaultBuyIn;
+          const netProfit = p.chips - totalBuyIn;
+          return {
+            id: p.id,
+            name: p.name,
+            avatar: p.avatar,
+            chips: p.chips,
+            totalBuyIn: totalBuyIn,
+            netProfit: netProfit
+          };
+        }).sort((a, b) => {
+          if (b.netProfit !== a.netProfit) {
+            return b.netProfit - a.netProfit;
+          }
+          return b.chips - a.chips; // หากกำไรสุทธิเท่ากัน ตัดสินด้วยจำนวนชิปที่เหลืออยู่จริง
+        });
 
-        this.log(`Tournament complete! Champion: ${this.winnersLeaderboard[0]?.name || 'None'} with $${this.winnersLeaderboard[0]?.chips || 0}`);
+        this.log(`Tournament complete! Champion: ${this.winnersLeaderboard[0]?.name || 'None'} with Net Profit of $${this.winnersLeaderboard[0]?.netProfit || 0}`);
 
         if (this.onHandComplete) {
           this.onHandComplete();

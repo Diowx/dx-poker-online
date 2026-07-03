@@ -2329,3 +2329,39 @@ body {
   animation: slideUp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.2s forwards;
   opacity: 0; /* Keep hidden until animation starts */
 }
+
+/* --- NET PROFIT SCORES COLORS AND LAYOUTS --- */
+.profit-plus {
+  color: #00e676 !important; /* สีเขียวสว่างสำหรับผู้มีกำไร */
+  text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
+}
+
+.profit-minus {
+  color: #ff1744 !important; /* สีแดงสำหรับผู้ขาดทุนชิป */
+  text-shadow: 0 0 8px rgba(255, 23, 68, 0.2);
+}
+
+.podium-net-profit {
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.champion-net-profit {
+  font-size: 0.9rem;
+  font-weight: 900;
+  margin-top: 2px;
+}
+
+.rank-scores-block {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.rank-net {
+  font-size: 0.8rem;
+  font-weight: bold;
+  min-width: 60px;
+  text-align: right;
+}

@@ -463,7 +463,10 @@ function GameBoard({
                         <AvatarIcon id={room.winnersLeaderboard[1].avatar} size={50} />
                       </div>
                       <div className="podium-name">{room.winnersLeaderboard[1].name}</div>
-                      <div className="podium-chips">${room.winnersLeaderboard[1].chips.toLocaleString()}</div>
+                      <div className="podium-chips">${room.winnersLeaderboard[1].chips.toLocaleString()} ชิป</div>
+                      <div className={`podium-net-profit ${room.winnersLeaderboard[1].netProfit >= 0 ? 'profit-plus' : 'profit-minus'}`}>
+                        {room.winnersLeaderboard[1].netProfit >= 0 ? `+$${room.winnersLeaderboard[1].netProfit.toLocaleString()}` : `-$${Math.abs(room.winnersLeaderboard[1].netProfit).toLocaleString()}`}
+                      </div>
                     </div>
                     <div className="podium-pillar pillar-2">
                       <span className="place-num">2</span>
@@ -480,7 +483,10 @@ function GameBoard({
                         <AvatarIcon id={room.winnersLeaderboard[0].avatar} size={65} />
                       </div>
                       <div className="podium-name champion-name">{room.winnersLeaderboard[0].name}</div>
-                      <div className="podium-chips champion-chips">${room.winnersLeaderboard[0].chips.toLocaleString()}</div>
+                      <div className="podium-chips champion-chips">${room.winnersLeaderboard[0].chips.toLocaleString()} ชิป</div>
+                      <div className={`champion-net-profit ${room.winnersLeaderboard[0].netProfit >= 0 ? 'profit-plus' : 'profit-minus'}`}>
+                        กำไร: {room.winnersLeaderboard[0].netProfit >= 0 ? `+$${room.winnersLeaderboard[0].netProfit.toLocaleString()}` : `-$${Math.abs(room.winnersLeaderboard[0].netProfit).toLocaleString()}`}
+                      </div>
                     </div>
                     <div className="podium-pillar pillar-1">
                       <span className="place-num">1</span>
@@ -496,7 +502,10 @@ function GameBoard({
                         <AvatarIcon id={room.winnersLeaderboard[2].avatar} size={45} />
                       </div>
                       <div className="podium-name">{room.winnersLeaderboard[2].name}</div>
-                      <div className="podium-chips">${room.winnersLeaderboard[2].chips.toLocaleString()}</div>
+                      <div className="podium-chips">${room.winnersLeaderboard[2].chips.toLocaleString()} ชิป</div>
+                      <div className={`podium-net-profit ${room.winnersLeaderboard[2].netProfit >= 0 ? 'profit-plus' : 'profit-minus'}`}>
+                        {room.winnersLeaderboard[2].netProfit >= 0 ? `+$${room.winnersLeaderboard[2].netProfit.toLocaleString()}` : `-$${Math.abs(room.winnersLeaderboard[2].netProfit).toLocaleString()}`}
+                      </div>
                     </div>
                     <div className="podium-pillar pillar-3">
                       <span className="place-num">3</span>
@@ -514,7 +523,12 @@ function GameBoard({
                       <div key={player.id} className="other-ranking-row">
                         <span className="rank-badge">#{idx + 4}</span>
                         <span className="rank-name">{player.name}</span>
-                        <span className="rank-chips">${player.chips.toLocaleString()}</span>
+                        <div className="rank-scores-block">
+                          <span className="rank-chips">${player.chips.toLocaleString()} ชิป</span>
+                          <span className={`rank-net ${player.netProfit >= 0 ? 'profit-plus' : 'profit-minus'}`}>
+                            {player.netProfit >= 0 ? `+$${player.netProfit.toLocaleString()}` : `-$${Math.abs(player.netProfit).toLocaleString()}`}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
