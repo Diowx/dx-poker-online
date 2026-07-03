@@ -14,7 +14,8 @@ function GameBoard({
   onSetReady,
   onRebuy,
   onLeaveRoom,
-  onOpenRankings
+  onOpenRankings,
+  chatBubbles = {}
 }) {
   const me = room.players[socketId];
   const isHost = socketId === room.hostId;
@@ -61,6 +62,7 @@ function GameBoard({
               turnDuration={room.turnDuration}
               showdownOpponentCards={showdownOpponentCards}
               winnerIds={winnerIds}
+              chatBubble={chatBubbles[player.id]}
             />
           ) : (
             // Seated spectator can click an empty seat to sit down

@@ -11,7 +11,8 @@ function PlayerSeat({
   timerTimeLeft, 
   turnDuration, 
   showdownOpponentCards,
-  winnerIds = [] 
+  winnerIds = [],
+  chatBubble
 }) {
   if (!player) {
     return (
@@ -89,6 +90,12 @@ function PlayerSeat({
 
   return (
     <div className={`player-seat occupied ${isActive ? 'active' : ''} ${player.isOnline ? '' : 'offline'} ${isWinner ? 'winner-glow' : ''} ${isSelf ? 'self-seat' : ''}`}>
+      {chatBubble && (
+        <div className="chat-bubble-overlay animate-bubbleIn">
+          <div className="chat-bubble-text">{chatBubble.text}</div>
+          <div className="chat-bubble-arrow"></div>
+        </div>
+      )}
       {/* Turn timer circle */}
       {isActive && (
         <svg className="timer-svg" width="100" height="100">

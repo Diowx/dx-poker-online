@@ -253,6 +253,13 @@ io.on('connection', (socket) => {
       type: 'chat'
     });
 
+    // ยิงอีเวนต์ใหม่เพื่อส่งข้อความทำบับเบิ้ลแสดงบนโต๊ะ
+    io.to(currentRoomId).emit('new-chat-message', {
+      playerId: socket.id,
+      name: player.name,
+      text: messageText
+    });
+
     broadcastRoomState(room);
   });
 

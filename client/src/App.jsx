@@ -17,6 +17,7 @@ function App() {
   const [showdownOpponentCards, setShowdownOpponentCards] = useState(null);
   const [showdownResults, setShowdownResults] = useState([]);
   const [cardBack, setCardBack] = useState('red'); // 'red', 'blue', 'black', 'gold', 'green'
+  const [chatBubbles, setChatBubbles] = useState({});
 
   useEffect(() => {
     // Listen for socket events
@@ -97,11 +98,32 @@ function App() {
       setShowdownOpponentCards(null);
     });
 
+    socket.on('new-chat-message', ({ playerId, name, text }) => {
+      const bubbleId = Date.now();
+      setChatBubbles(prev => ({
+        ...prev,
+        [playerId]: { text, id: bubbleId }
+      }));
+
+      // ลบข้อความบับเบิ้ลหลังจากแชทค้างไว้ 4 วินาที
+      setTimeout(() => {
+        setChatBubbles(prev => {
+          if (prev[playerId] && prev[playerId].id === bubbleId) {
+            const updated = { ...prev };
+            delete updated[playerId];
+            return updated;
+          }
+          return prev;
+        });
+      }, 4000);
+    });
+
     return () => {
       socket.off('connect');
       socket.off('room-state');
       socket.off('timer-update');
       socket.off('showdown-results');
+      socket.off('new-chat-message');
       socket.off('disconnect');
     };
   }, []);
@@ -183,6 +205,7 @@ function App() {
               onAction={handleAction}
               showdownOpponentCards={showdownOpponentCards}
               showdownResults={showdownResults}
+              chatBubbles={chatBubbles}
               onStandUp={handleStandUp}
               onSetReady={handleSetReady}
               onRebuy={handleSitOrRebuy}
