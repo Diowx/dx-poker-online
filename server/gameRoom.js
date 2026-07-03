@@ -299,6 +299,10 @@ class GameRoom {
 
     // Start betting round
     this.startBettingRound();
+
+    if (this.onHandStart) {
+      this.onHandStart();
+    }
   }
 
   postBlinds() {
