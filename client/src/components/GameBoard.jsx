@@ -29,6 +29,7 @@ function GameBoard({
   const [showSponsorModal, setShowSponsorModal] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(15);
   const [isClaiming, setIsClaiming] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // ควบคุมการนับถอยหลังของเวลารับชิปสปอนเซอร์
   useEffect(() => {
@@ -85,7 +86,10 @@ function GameBoard({
   const handleCopyCode = () => {
     navigator.clipboard.writeText(room.roomId);
     playChipBet();
-    alert('คัดลอกรหัสเข้าห้องแล้ว: ' + room.roomId);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   // Seated players and seats
@@ -188,7 +192,9 @@ function GameBoard({
       <div className="top-action-bar">
         <div className="room-info">
           <span className="room-label">รหัสโต๊ะ:</span>
-          <span className="room-value code" onClick={handleCopyCode}>{room.roomId} 📋</span>
+          <span className="room-value code" onClick={handleCopyCode}>
+            {copied ? 'คัดลอกแล้ว! ✅' : `${room.roomId} 📋`}
+          </span>
           <span className="room-divider">|</span>
           <span className="room-label">Small/Big Blind:</span>
           <span className="room-value">${room.smallBlind}/${room.bigBlind}</span>
